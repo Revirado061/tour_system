@@ -25,30 +25,40 @@
 ![image](https://github.com/user-attachments/assets/9cee0124-29cf-4d96-80d5-e1f060381120)
 ## 2 游学推荐
 1.推荐功能：在进入到游学推荐页面，系统会按照热度自动为学生推荐前10个景点。也可以点击“显示系统默认排序”按钮，显示系统排序。
+
 2.用户可以点击“显示所有数据”按钮，浏览所有游学目的地。
+
 3.推荐功能：用户可以只选择不同的排序方式（热度或评价）进行排序，结果会显示前10个地点
 ![image](https://github.com/user-attachments/assets/d997a531-35b4-4f42-a665-bcc299a87faf)
+
 4.查询功能：用户可以输入(完全或不完全）地点名，选择或输入类别，选择热度或者评价进行排序，点击“搜索”按钮系统会显示排序结果
+
 ![image](https://github.com/user-attachments/assets/706bdd9a-3059-4e16-9868-f323b52ab3d9)
 ![image](https://github.com/user-attachments/assets/701e02e9-be63-4f0a-be10-8ac9a9739e59)
+
 5.类别筛选：用户可以对输出结果进行地点类别(单选或多选）筛选。
+
 ![image](https://github.com/user-attachments/assets/2ca10d61-79a1-45e4-8611-3f053f901503)
 ![image](https://github.com/user-attachments/assets/e6efac44-cd53-4226-bc72-174ad8c886ac)
 
 6.美食推荐：用户点击“查看详情”按钮，系统会跳转到美食推荐页面。
+
 7.点击任意一行游学地信息，会自动跳转到场所查询页面。
 ## 3 场所查询
 1.进入场所查询页面，系统会自动显示景区内所有设施
 ![image](https://github.com/user-attachments/assets/16594715-f3b5-4309-a0de-0db3f9ec4906)
 
 2.过滤功能：用户可以对输出结果进行设施类别(单选或多选）筛选。
+
 ![image](https://github.com/user-attachments/assets/1a4355bb-7887-474c-a5cf-651a6a3c7ed8)
 ![image](https://github.com/user-attachments/assets/9bb33a47-21ff-43cd-a4eb-62329c138c4e)
 
 3.查询、排序和范围排序功能：用户可以输入或选择地点，输入距离半径，输入或选择类别，点击“搜索”按钮对某个景点的附近设施进行距离排序。
+
 ![image](https://github.com/user-attachments/assets/917c466d-e95b-43dc-8dbe-5e7c2b0e1748)
 
 ## 4 游学日记管理
+
 1.在进入游学日记管理页面，系统会自动展示所有游学日记和所有日记数目。（默认排序是热度）
 ![image](https://github.com/user-attachments/assets/54312f9a-ef5b-4039-b458-928aa673fb15)
 
@@ -88,7 +98,9 @@
 ## 5 游学路线规划
 地点选择和路线规划：
 1.用户可以选择最短路径策略或者最短时间策略的规划方式，
+
 2.输入或选择出发地点，输入目的地，点击“新增目标景点”按钮，添加多个目标景点。
+
 3.点击“提交”按钮，系统会跳出成功提交弹框，之后游学路线规划为自动显示出来。
 ![image](https://github.com/user-attachments/assets/85a666de-b836-4beb-8c31-68a2b0c7238c)
 ![image](https://github.com/user-attachments/assets/2f57ee31-0c89-4b37-a2c6-911eba78dd85)
