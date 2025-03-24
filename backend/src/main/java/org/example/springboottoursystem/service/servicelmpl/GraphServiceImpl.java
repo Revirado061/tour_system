@@ -136,12 +136,9 @@ public class GraphServiceImpl implements GraphService {
             }
         }
 
-//        boolean[] vis = new boolean[n + 1];  // 标记数组
-//        double[] value = new double[n + 1];  // 起点s到其他点的距离
         boolean[] vis = new boolean[n];  // 标记数组
         double[] value = new double[n];  // 起点s到其他点的距离
         Arrays.fill(value, 0x3f);  // 初始化为最大值
-//        int[] pre = new int[n + 1];  // 存储每个点的前驱节点
         int[] pre = new int[n];  // 存储每个点的前驱节点
         Arrays.fill(pre, -1);  // 初始化为-1
 
@@ -179,7 +176,6 @@ public class GraphServiceImpl implements GraphService {
             stack.push(current);
             Node node = nodeDao.findById((long) (current + 1)).orElse(null);
             route.add(node);
-//            System.out.println(node.getName());  //为什么
             current = pre[current];
         }
         Collections.reverse(route);

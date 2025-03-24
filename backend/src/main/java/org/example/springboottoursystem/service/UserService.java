@@ -18,4 +18,6 @@ public interface UserService {
      * @return
      */
     User registService(User user);
+
+    void deleteUser(String uname);
 }

@@ -7,6 +7,7 @@ import org.example.springboottoursystem.domain.Spot;
 import org.example.springboottoursystem.repository.SpotDao;
 import org.example.springboottoursystem.service.SpotService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class SpotServiceImpl implements SpotService {
     }
 
     @Override
+    @Cacheable(value = "spotCache", key = "#n")
     public List<Spot> findTopHeat(int n) {
         List<Spot> table = spotDao.findAll();
         List<Spot> topTable = new ArrayList<>();

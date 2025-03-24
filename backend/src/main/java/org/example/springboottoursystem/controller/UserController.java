@@ -15,13 +15,15 @@ public class UserController {
     @Resource
     private UserService userService;  //先将上一层的接口实例化，以便调用里边的函数
 
-    @PostMapping("/login")  //表示处理post请求，路由为/user/login
-    public Result<User> loginController(String uname, String password){  //对应UserService里的loginService
+    @PostMapping("/login")  // 表示处理POST请求，路由为/user/login
+    public Result<User> loginController(@RequestBody User request) {
+        String uname = request.getUname();
+        String password = request.getPassword();
         User user = userService.loginService(uname, password);
-        if(user!=null){
-            return Result.success(user,"登录成功！");
-        }else{
-            return Result.error("123","账号或密码错误！");
+        if (user != null) {
+            return Result.success(user, "登录成功！");
+        } else {
+            return Result.error("123", "账号或密码错误！");
         }
     }
 
