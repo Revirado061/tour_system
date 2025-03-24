@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.springboottoursystem.mapper.HuffmanTreeMapper">
+
+    <!-- 根据树的ID查询Huffman树 -->
+    <select id="findByTree" parameterType="Long" resultType="org.example.springboottoursystem.domain.HuffmanTree">
+        SELECT * FROM huffman_tree WHERE tree_id = #{id}
+    </select>
+
+    <!-- 保存Huffman树 -->
+    <insert id="save" parameterType="org.example.springboottoursystem.domain.HuffmanTree" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO huffman_tree (tree_data, create_time) VALUES (#{treeData}, #{createTime})
+    </insert>
+</mapper>

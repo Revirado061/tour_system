@@ -1,4 +1,4 @@
-package org.example.springboottoursystem.service.serviceImpl;
+package org.example.springboottoursystem.service.servicelmpl;
 
 import jakarta.annotation.Resource;
 import org.example.springboottoursystem.domain.Spot;

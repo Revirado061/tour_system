@@ -14,7 +14,6 @@
 
     <!-- 保存日记 -->
     <insert id="save" parameterType="org.example.springboottoursystem.domain.Diary" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO diary (title, spot, author, date, heat, grade, text)
-        VALUES (#{title}, #{spot}, #{author}, #{date}, #{heat}, #{grade}, #{text})
+        INSERT INTO diary (content, createTime, updateTime) VALUES (#{content}, #{createTime}, #{updateTime})
     </insert>
 </mapper>
