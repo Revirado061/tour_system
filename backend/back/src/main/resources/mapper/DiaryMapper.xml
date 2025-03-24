@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.springboottoursystem.mapper.DiaryMapper">
+
+    <!-- 根据ID查询日记 -->
+    <select id="findById" parameterType="long" resultType="org.example.springboottoursystem.domain.Diary">
+        SELECT * FROM diary WHERE id = #{id}
+    </select>
+
+    <!-- 查询所有日记 -->
+    <select id="findAll" resultType="org.example.springboottoursystem.domain.Diary">
+        SELECT * FROM diary
+    </select>
+
+    <!-- 保存日记 -->
+    <insert id="save" parameterType="org.example.springboottoursystem.domain.Diary" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO diary (title, spot, author, date, heat, grade, text)
+        VALUES (#{title}, #{spot}, #{author}, #{date}, #{heat}, #{grade}, #{text})
+    </insert>
+</mapper>

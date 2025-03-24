@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.springboottoursystem.mapper.SpotMapper">
+
+    <!-- 根据名称查询单个景点 -->
+    <select id="findByName" parameterType="String" resultType="org.example.springboottoursystem.domain.Spot">
+        SELECT * FROM spot WHERE name = #{name}
+    </select>
+
+    <!-- 查询所有景点 -->
+    <select id="findAll" resultType="org.example.springboottoursystem.domain.Spot">
+        SELECT * FROM spot
+    </select>
+</mapper>

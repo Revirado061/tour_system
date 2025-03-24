@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.springboottoursystem.mapper.UserMapper">
+    <select id="findByUname" parameterType="String" resultType="org.example.springboottoursystem.domain.User">
+        SELECT * FROM user WHERE uname = #{uname}
+    </select>
+
+    <select id="findByUnameAndPassword" parameterType="map" resultType="org.example.springboottoursystem.domain.User">
+        SELECT * FROM user WHERE uname = #{uname} AND password = #{password}
+    </select>
+
+    <insert id="insertUser" parameterType="org.example.springboottoursystem.domain.User" useGeneratedKeys="true" keyProperty="uid">
+        INSERT INTO user(uname, password) VALUES(#{uname}, #{password})
+    </insert>
+
+    <delete id="deleteUser" parameterType="String">
+        DELETE FROM user WHERE uname = #{uname}
+    </delete>
+</mapper>
