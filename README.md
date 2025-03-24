@@ -8,10 +8,10 @@
 
 # 设计思路
 ## 后端
-基于Spring Boot框架完成后端开发，设计并实现游学地点推荐、路线规划、日记管理等核心功能；
-使用MyBatis进行数据持久化；
-使用Redis缓存热门景点数据；
-使用Elasticsearch实现日记的全文检索。
+基于Spring Boot框架完成后端开发，设计并实现游学地点推荐、路线规划、日记管理等核心功能；  
+使用MyBatis进行数据持久化；  
+使用Redis缓存热门景点数据；  
+使用Elasticsearch实现日记的全文检索。  
 
 ## 前端
 采用`vue`来作为框架，使用`ElmentUI`、`axios`等组件。
