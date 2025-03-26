@@ -2,16 +2,16 @@ package org.example.springboottoursystem.controller;
 
 import jakarta.annotation.Resource;
 import org.example.springboottoursystem.domain.Diary;
-import org.example.springboottoursystem.domain.HuffmanNode;
-import org.example.springboottoursystem.domain.Spot;
+import org.example.springboottoursystem.domain.DiaryEs;
+import org.example.springboottoursystem.service.DiarySearchService;
 import org.example.springboottoursystem.service.DiaryService;
 import org.example.springboottoursystem.utils.Result;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 
@@ -20,6 +20,8 @@ import java.util.Objects;
 public class DiaryController {
     @Resource
     private DiaryService diaryService;
+    @Resource
+    private DiarySearchService diarySearchService;
 
     @RequestMapping("number")  //获取日记数目
     public Result<Integer> numberController(){
@@ -52,7 +54,7 @@ public class DiaryController {
     public Result<Diary> writeDiaryController(@RequestParam("title") String title,
                                               @RequestParam("spot") String spot,  //景点
                                               @RequestParam("author") String author,
-                                              @RequestParam("text") String text){
+                                              @RequestParam("text") String text) throws IOException {
         Diary diary;
         diary = diaryService.writeDiary(title, spot, author, text);
         return new Result<>(diary);
@@ -105,6 +107,16 @@ public class DiaryController {
             result =  diaryService.sortAllByGrade(searchResult);
         }
         return new Result<>(result);
+    }
+
+    @RequestMapping ("/search")
+    public List<DiaryEs> searchDiaries(@RequestParam("keyword") String keyword) {
+        try {
+            return diarySearchService.searchDiaries(keyword);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
 }

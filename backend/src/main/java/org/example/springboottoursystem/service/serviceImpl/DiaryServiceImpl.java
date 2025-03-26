@@ -1,15 +1,15 @@
-package org.example.springboottoursystem.service.servicelmpl;
+package org.example.springboottoursystem.service.serviceImpl;
 
 import jakarta.annotation.Resource;
-import org.example.springboottoursystem.domain.*;
 import org.example.springboottoursystem.domain.Diary;
+import org.example.springboottoursystem.domain.DiaryEs;
 import org.example.springboottoursystem.mapper.DiaryMapper;
-import org.example.springboottoursystem.mapper.HuffmanTreeMapper;
+import org.example.springboottoursystem.service.DiarySearchService;
 import org.example.springboottoursystem.service.DiaryService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import java.text.DecimalFormat;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -20,14 +20,13 @@ public class DiaryServiceImpl implements DiaryService {
 
     @Resource
     private final DiaryMapper diaryMapper;
-    private final HuffmanTreeMapper huffmanTreeMapper;
+    @Resource
+    private final DiarySearchService diarySearchService;
 
-    @Autowired
-    public DiaryServiceImpl(DiaryMapper diaryMapper, HuffmanTreeMapper huffmanTreeMapper) {
+    public DiaryServiceImpl(DiaryMapper diaryMapper, DiarySearchService diarySearchService) {
         this.diaryMapper = diaryMapper;
-        this.huffmanTreeMapper = huffmanTreeMapper;
+        this.diarySearchService = diarySearchService;
     }
-
 
     @Override
     public int getDiaryNumber() {
@@ -36,31 +35,42 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     @Override
-    public Diary updateGrade(long id, double star) {  //打分 star范围是1~10分
+    public Diary updateHeat(long id) {
         Diary diary = diaryMapper.findById(id);
-        double grade = diary.getGrade() * 0.9 + star * 0.1;
-        if(grade >= 10){
-            grade = 10.0;
-        }
-
-        /*格式化grade*/
-        DecimalFormat df = new DecimalFormat("0.0");
-        String formattedNumber = df.format(grade);
-        grade = Double.parseDouble(formattedNumber);
-
-        diary.setGrade(grade);
+        diary.setHeat(diary.getHeat() + 1);
         diaryMapper.save(diary);
+
+        // 同步到 Elasticsearch
+        DiaryEs diaryEs = new DiaryEs();
+        BeanUtils.copyProperties(diary, diaryEs);
+        try {
+            diarySearchService.syncDiaryToElasticsearch(diaryEs);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return diary;
     }
 
     @Override
-    public Diary updateHeat(long id) {
+    public Diary updateGrade(long id, double star) {
         Diary diary = diaryMapper.findById(id);
-        int heat = diary.getHeat();
-        heat++;
-        diary.setHeat(heat);
+        double grade = diary.getGrade() * 0.9 + star * 0.1;
+        if (grade >= 10) {
+            grade = 10.0;
+        }
+        diary.setGrade(grade);
         diaryMapper.save(diary);
+
+        // 同步到 Elasticsearch
+        DiaryEs diaryEs = new DiaryEs();
+        BeanUtils.copyProperties(diary, diaryEs);
+        try {
+            diarySearchService.syncDiaryToElasticsearch(diaryEs);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return diary;
     }
 
@@ -166,93 +176,55 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     @Override
-    public Diary writeDiary(String title, String spot, String author, String text) {
-
-        /*获取当前时间*/
+    public Diary writeDiary(String title, String spot, String author, String text) throws IOException {
+        diarySearchService.ensureIndexExists(); // 确保索引存在
         LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String time = now.format(formatter);
-        int heat = 0;
-        double grade = 7.0;
-        Diary diary = new Diary(title, spot, author, time, heat, grade, text);
+        String formattedDate = Diary.formatLocalDateTime(now);
+        Diary diary = new Diary(title, spot, author, formattedDate, 0, 7.0, text);
         diaryMapper.save(diary);
-        diary.setText(this.compressDiary(diary, diary.getText()));
-        diaryMapper.save(diary);
-        diary.setText(text);
+
+        // 同步到 Elasticsearch
+        DiaryEs diaryEs = new DiaryEs();
+        BeanUtils.copyProperties(diary, diaryEs);
+        try {
+            diarySearchService.syncDiaryToElasticsearch(diaryEs);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return diary;
     }
 
     @Override
     public Diary readDiary(long id) {
-        Diary diary = diaryMapper.findById(id);
-        String text = uncompressDiary(diary);
-        diary.setText(text);
-        return diary;
+        return diaryMapper.findById(id);
     }
 
     @Override
-    public String compressDiary(Diary diary, String inputText) {
-        Map<Character, Integer> frequencyMap = new HashMap<>();
-        for (char c : inputText.toCharArray()) {
-            frequencyMap.put(c, frequencyMap.getOrDefault(c, 0) + 1);
-        }
-        PriorityQueue<HuffmanNode> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(n -> n.frequency));
-        for (Map.Entry<Character, Integer> entry : frequencyMap.entrySet()) {
-            priorityQueue.add(new HuffmanNode(entry.getKey(), entry.getValue()));
-        }
+    public void loadAllDiariesToElasticsearch() throws IOException {
+        // 确保索引存在
+        diarySearchService.ensureIndexExists();
 
-        while (priorityQueue.size() > 1) {
-            HuffmanNode left = priorityQueue.poll();
-            HuffmanNode right = priorityQueue.poll();
-            HuffmanNode parent = new HuffmanNode('\0', left.frequency + right.frequency, left, right);
-            priorityQueue.add(parent);
-        }
+        // 查询 MySQL 数据库中的所有日记数据
+        List<Diary> allDiaries = diaryMapper.findAll();
 
-        HuffmanNode root = priorityQueue.poll();
-        Map<Character, String> huffmanCodes = new HashMap<>();
-        generateHuffmanCodes(root, "", huffmanCodes);
+        // 将每条日记数据同步到 Elasticsearch
+        for (Diary diary : allDiaries) {
+            DiaryEs diaryEs = new DiaryEs();
+            BeanUtils.copyProperties(diary, diaryEs);
 
-        for (Map.Entry<Character, String> entry : huffmanCodes.entrySet()) {
-            HuffmanTree huffmanTree = new HuffmanTree(diary.getId(), entry.getKey(), entry.getValue());
-            huffmanTreeMapper.save(huffmanTree);
-        }
+            // 转换日期格式
+            LocalDateTime dateTime = LocalDateTime.parse(diary.getDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            diaryEs.setDate(dateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
 
-        // 将霍夫曼编码后的数据转换为字符串
-        StringBuilder encodedText = new StringBuilder();
-        for (char c : inputText.toCharArray()) {
-            encodedText.append(huffmanCodes.get(c));
-        }
-
-        String text = encodedText.toString();
-        return text;
-    }
-
-    public void generateHuffmanCodes(HuffmanNode node, String code, Map<Character, String> huffmanCodes) {
-        if (node == null) {
-            return;
-        }
-        if (node.left == null && node.right == null) {
-            huffmanCodes.put(node.character, code);
-        }
-        generateHuffmanCodes(node.left, code + "0", huffmanCodes);
-        generateHuffmanCodes(node.right, code + "1", huffmanCodes);
-    }
-
-    @Override
-    public String uncompressDiary(Diary diary) {
-        String huffmanCodes = diary.getText();
-        List<HuffmanTree> huffmanTrees = huffmanTreeMapper.findByTree(diary.getId());
-        String text = new String();
-        while(!Objects.equals(huffmanCodes, "")){
-            for(HuffmanTree huffmanTree : huffmanTrees){
-                if(huffmanCodes.startsWith(huffmanTree.getCode())){  //是前缀
-                    text+=huffmanTree.getWord();
-                    huffmanCodes = huffmanCodes.replaceFirst("^" + huffmanTree.getCode(), "");
-                }
+            try {
+                diarySearchService.syncDiaryToElasticsearch(diaryEs);
+                System.out.println("Synced diary with ID: " + diary.getId());
+            } catch (IOException e) {
+                System.err.println("Error syncing diary with ID: " + diary.getId() + " to Elasticsearch: " + e.getMessage());
+                e.printStackTrace();
             }
         }
-        return text;
     }
-
 
 }

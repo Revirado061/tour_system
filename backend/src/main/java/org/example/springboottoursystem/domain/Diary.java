@@ -1,6 +1,7 @@
 package org.example.springboottoursystem.domain;
 
-import org.springframework.stereotype.Service;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Diary {
 
@@ -12,7 +13,6 @@ public class Diary {
     private int heat;  //热度
     private double grade;  //评分
     private String text;  //内容
-
 
     public Diary() {
     }
@@ -89,5 +89,10 @@ public class Diary {
 
     public Long getId() {
         return id;
+    }
+
+    // 用于将 LocalDateTime 转换为 ISO 8601 格式
+    public static String formatLocalDateTime(LocalDateTime dateTime) {
+        return dateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 }

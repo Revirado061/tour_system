@@ -1,9 +1,8 @@
 package org.example.springboottoursystem.service;
 
 import org.example.springboottoursystem.domain.Diary;
-import org.example.springboottoursystem.domain.HuffmanNode;
-import org.example.springboottoursystem.domain.Node;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -25,13 +24,9 @@ public interface DiaryService {
 
      List<Diary> findAllDiary();
 
-     Diary writeDiary(String title, String spot, String author, String text);
+     Diary writeDiary(String title, String spot, String author, String text) throws IOException;
 
      Diary readDiary(long id);
 
-     String compressDiary(Diary diary, String inputText);
-
-     void generateHuffmanCodes(HuffmanNode node, String code, Map<Character, String> huffmanCodes);
-
-     String uncompressDiary(Diary diary);
+    void loadAllDiariesToElasticsearch() throws IOException;
 }

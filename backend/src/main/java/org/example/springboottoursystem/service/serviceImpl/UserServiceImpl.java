@@ -1,4 +1,4 @@
-package org.example.springboottoursystem.service.servicelmpl;
+package org.example.springboottoursystem.service.serviceImpl;
 
 import jakarta.annotation.Resource;
 import org.example.springboottoursystem.domain.User;
