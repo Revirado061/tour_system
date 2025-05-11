@@ -3,6 +3,10 @@
 <mapper namespace="org.example.springboottoursystem.mapper.EdgeMapper">
     <!-- 查询所有边 -->
     <select id="findAll" resultType="org.example.springboottoursystem.domain.Edge">
+<<<<<<< HEAD
         SELECT id, length, crowd, start_node AS startNode, end_node AS endNode FROM edge
+=======
+        SELECT * FROM edge
+>>>>>>> d0d46300093d1196bd0f7da5ee1bae39e074e655
     </select>
 </mapper>

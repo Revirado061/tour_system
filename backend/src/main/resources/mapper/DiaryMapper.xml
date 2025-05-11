@@ -17,6 +17,7 @@
         INSERT INTO diary (title, spot, author, date, heat, grade, text)
         VALUES (#{title}, #{spot}, #{author}, #{date}, #{heat}, #{grade}, #{text})
     </insert>
+<<<<<<< HEAD
 
     <update id="updateHeat" parameterType="org.example.springboottoursystem.domain.Diary">
         UPDATE diary SET heat = #{heat} WHERE id = #{id}
@@ -24,4 +25,6 @@
     <update id="updateGrade" parameterType="org.example.springboottoursystem.domain.Diary">
         UPDATE diary SET grade = #{grade} WHERE id = #{id}
     </update>
+=======
+>>>>>>> d0d46300093d1196bd0f7da5ee1bae39e074e655
 </mapper>

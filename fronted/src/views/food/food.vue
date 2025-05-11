@@ -14,7 +14,11 @@
             </div>
           <el-col :span="4" style="margin-top: 10px;margin-left: 20px">
             <el-form-item label="排序">
+<<<<<<< HEAD
               <el-select v-model="value">
+=======
+              <el-select>
+>>>>>>> d0d46300093d1196bd0f7da5ee1bae39e074e655
                 <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -182,10 +186,13 @@ export default {
       else if(type === '川菜' || type === '湘菜')
         return 'danger'
     },
+<<<<<<< HEAD
     handleRowClick(row) {
       // 可根据需要处理点击行的逻辑
       // console.log(row);
     },
+=======
+>>>>>>> d0d46300093d1196bd0f7da5ee1bae39e074e655
   }
 }
 </script>

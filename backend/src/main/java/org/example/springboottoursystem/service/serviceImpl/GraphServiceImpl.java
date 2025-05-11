@@ -40,6 +40,7 @@ public class GraphServiceImpl implements GraphService {
     @Override
     public List<Node> findShortestLength(String start, List<String> terminal) {
         List<Edge> table = edgeMapper.findAll();
+<<<<<<< HEAD
         List<Node> allNodes = nodeMapper.findAll();
         // 建立id到index和index到id映射
         Map<Long, Integer> idToIndex = new HashMap<>();
@@ -58,12 +59,24 @@ public class GraphServiceImpl implements GraphService {
             graph[endIdx][startIdx] = edge.getLength() / 10;
         }
         return findShortestRoute(graph, start, terminal, idToIndex, indexToId, allNodes);
+=======
+        int n = table.size();  //节点个数
+        double[][] graph = new double[n][n];
+        for (Edge edge: table){
+            int startNode = Math.toIntExact(edge.getStartNode());
+            int endNode = Math.toIntExact(edge.getEndNode());
+            graph[startNode - 1][endNode - 1] = edge.getLength() / 10;
+            graph[endNode - 1][startNode - 1] = edge.getLength() / 10;
+        }
+        return findShortestRoute(graph, start, terminal);
+>>>>>>> d0d46300093d1196bd0f7da5ee1bae39e074e655
     }
 
 
     @Override
     public List<Node> findShortestTime(String start, List<String> terminal) {
         List<Edge> table = edgeMapper.findAll();
+<<<<<<< HEAD
         List<Node> allNodes = nodeMapper.findAll();
         Map<Long, Integer> idToIndex = new HashMap<>();
         Map<Integer, Long> indexToId = new HashMap<>();
@@ -83,22 +96,47 @@ public class GraphServiceImpl implements GraphService {
             graph[endIdx][startIdx] = edge.getLength() / (speed * crowd);
         }
         return findShortestRoute(graph, start, terminal, idToIndex, indexToId, allNodes);
+=======
+        int n = table.size();  //节点个数
+        double[][] graph = new double[n][n];
+        int speed = 10;
+        for (Edge edge: table){
+            int startNode = Math.toIntExact(edge.getStartNode());
+            int endNode = Math.toIntExact(edge.getEndNode());
+            double crowd = edge.getCrowd();
+            graph[startNode - 1][endNode - 1] = edge.getLength() / (speed * crowd);
+            graph[endNode - 1][startNode - 1] = edge.getLength() / (speed * crowd);
+        }
+        return findShortestRoute(graph, start, terminal);
+>>>>>>> d0d46300093d1196bd0f7da5ee1bae39e074e655
     }
 
 
     @Override
+<<<<<<< HEAD
     public List<Node> findShortestRoute(double[][] graph, String start, List<String> terminal, Map<Long, Integer> idToIndex, Map<Integer, Long> indexToId, List<Node> allNodes) {
         Node s = nodeMapper.findByName(start);
         int startIdx = idToIndex.get(s.getId());
         boolean[] isArrived = new boolean[allNodes.size() + 1];
+=======
+    public List<Node> findShortestRoute(double[][] graph, String start, List<String> terminal) {
+        Node s = nodeMapper.findByName(start);
+        int startId = Math.toIntExact(s.getId());
+        boolean[] isArrived = new boolean[100];
+>>>>>>> d0d46300093d1196bd0f7da5ee1bae39e074e655
         List<Node> result = new ArrayList<>();
 
         while(true){
             boolean flag = false;
             for(String tNode : terminal){
                 Node t = nodeMapper.findByName(tNode);
+<<<<<<< HEAD
                 int terminalIdx = idToIndex.get(t.getId());
                 if(!isArrived[terminalIdx]){
+=======
+                int terminalId = Math.toIntExact(t.getId());
+                if(!isArrived[terminalId]){
+>>>>>>> d0d46300093d1196bd0f7da5ee1bae39e074e655
                     flag = true;
                     break;
                 }
@@ -106,11 +144,16 @@ public class GraphServiceImpl implements GraphService {
             if(!flag){
                 break;
             }
+<<<<<<< HEAD
+=======
+            /*找出s到每一个t的最短路径，取最短*/
+>>>>>>> d0d46300093d1196bd0f7da5ee1bae39e074e655
             double minLen = 0;
             int closestNode = 0;
             List<Node> shortestRoute = new ArrayList<>();
             for(String tNode : terminal){
                 Node t = nodeMapper.findByName(tNode);
+<<<<<<< HEAD
                 int terminalIdx = idToIndex.get(t.getId());
                 if(!isArrived[terminalIdx]){
                     List<Node> route = dijkstra(graph, startIdx, terminalIdx, indexToId, allNodes);
@@ -121,13 +164,30 @@ public class GraphServiceImpl implements GraphService {
                     if(minLen == 0 || len < minLen){
                         minLen = len;
                         closestNode = terminalIdx;
+=======
+                int terminalId = Math.toIntExact(t.getId());
+                if(!isArrived[terminalId]){
+                    List<Node> route = dijkstra(graph, startId - 1, terminalId - 1);
+                    /*算路径长度*/
+                    double len = 0;
+                    for(int j = 0; j < route.size() - 1; j++){
+                        len += graph[(int) (route.get(j).getId() - 1)][(int) (route.get(j + 1).getId() - 1)];
+                    }
+                    if(minLen == 0 || len < minLen){
+                        minLen = len;
+                        closestNode = terminalId;
+>>>>>>> d0d46300093d1196bd0f7da5ee1bae39e074e655
                         shortestRoute = route;
                     }
                 }
             }
             isArrived[closestNode] = true;
             result.addAll(shortestRoute);
+<<<<<<< HEAD
             startIdx = closestNode;
+=======
+            startId = closestNode;  //更新起点
+>>>>>>> d0d46300093d1196bd0f7da5ee1bae39e074e655
         }
         for (int i = 0; i < result.size() - 1; i++) {
             Node node = result.get(i);
@@ -141,6 +201,7 @@ public class GraphServiceImpl implements GraphService {
 
 
     @Override
+<<<<<<< HEAD
     public List<Node> dijkstra(double[][] graph, int start, int terminal, Map<Integer, Long> indexToId, List<Node> allNodes) {
         int n = graph.length;
         for (int i = 0; i < n; i++) {
@@ -159,10 +220,37 @@ public class GraphServiceImpl implements GraphService {
         for (int i = 0; i < n; i++) {
             int k = 0;
             for (int j = 0; j < n; j++) {
+=======
+    public List<Node> dijkstra(double[][] graph, int start, int terminal) {
+        int n = graph.length; // 节点个数
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++){
+                if(graph[i][j] == 0){
+                    graph[i][j] = 5000000; // 也可以一开始就写好
+                }
+            }
+        }
+
+        boolean[] vis = new boolean[n];  // 标记数组
+        double[] value = new double[n];  // 起点s到其他点的距离
+        Arrays.fill(value, 0x3f);  // 初始化为最大值
+        int[] pre = new int[n];  // 存储每个点的前驱节点
+        Arrays.fill(pre, -1);  // 初始化为-1
+
+        // 初始化起点s
+        value[start] = 0;  // 起点s到s距离是0
+        // 循环n次，就可以将所有点都加入到集合里
+        for (int i = 0; i < n; i++) {
+            // 寻找当前最短路径
+            // 在未获取的顶点中心找到vs
+            int k = 0;  // 用来记录，不在S集合中，距离最近的点
+            for (int j = 0; j < n; j++) {  // 在没有确定最短路中的所有点找出距离最短的那个点
+>>>>>>> d0d46300093d1196bd0f7da5ee1bae39e074e655
                 if (!vis[j] && (k == 0 || value[j] <= value[k])) {
                     k = j;
                 }
             }
+<<<<<<< HEAD
             vis[k] = true;
             for (int j = 0; j < n; j++) {
                 if (!vis[j] && value[j] > value[k] + graph[k][j]) {
@@ -171,11 +259,29 @@ public class GraphServiceImpl implements GraphService {
                 }
             }
         }
+=======
+            // 循环结束k存的是没有确定节点中离起点s最近点的编号
+            // 标记k为获取的最短路径，加入集合S中
+            vis[k] = true;
+
+            // 修正当前最短路径和前驱顶点
+            // 当已经得到顶点k的最短路径之后，更新未获取的顶点的最短路径和前驱顶点
+            for (int j = 0; j < n; j++) {
+                if (!vis[j] && value[j] > value[k] + graph[k][j]) {
+                    value[j] = value[k] + graph[k][j];
+                    pre[j] = k;  // 存储前驱节点
+                }
+            }
+        }
+
+        // 输出最短路径和经过的点
+>>>>>>> d0d46300093d1196bd0f7da5ee1bae39e074e655
         List<Node> route = new ArrayList<>();
         Stack<Integer> stack = new Stack<>();
         int current = terminal;
         while (current != -1) {
             stack.push(current);
+<<<<<<< HEAD
             Long nodeId = indexToId.get(current);
             Node node = null;
             for (Node nObj : allNodes) {
@@ -184,6 +290,9 @@ public class GraphServiceImpl implements GraphService {
                     break;
                 }
             }
+=======
+            Node node = nodeMapper.findById((long) (current + 1)).orElse(null);
+>>>>>>> d0d46300093d1196bd0f7da5ee1bae39e074e655
             route.add(node);
             current = pre[current];
         }

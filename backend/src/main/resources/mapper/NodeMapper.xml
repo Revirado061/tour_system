@@ -11,8 +11,11 @@
     <select id="findById" parameterType="long" resultType="org.example.springboottoursystem.domain.Node">
         SELECT * FROM node WHERE id = #{id}
     </select>
+<<<<<<< HEAD
 
     <select id="findAll" resultType="org.example.springboottoursystem.domain.Node">
         SELECT * FROM node
     </select>
+=======
+>>>>>>> d0d46300093d1196bd0f7da5ee1bae39e074e655
 </mapper>

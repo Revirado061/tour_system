@@ -12,8 +12,11 @@ public interface DiaryMapper {
     List<Diary> findAll();
 
     void save(Diary diary);
+<<<<<<< HEAD
 
     void updateHeat(Diary diary);
 
     void updateGrade(Diary diary);
+=======
+>>>>>>> d0d46300093d1196bd0f7da5ee1bae39e074e655
 }

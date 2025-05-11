@@ -38,12 +38,17 @@ public class DiaryServiceImpl implements DiaryService {
     public Diary updateHeat(long id) {
         Diary diary = diaryMapper.findById(id);
         diary.setHeat(diary.getHeat() + 1);
+<<<<<<< HEAD
         diaryMapper.updateHeat(diary);
+=======
+        diaryMapper.save(diary);
+>>>>>>> d0d46300093d1196bd0f7da5ee1bae39e074e655
 
         // 同步到 Elasticsearch
         DiaryEs diaryEs = new DiaryEs();
         BeanUtils.copyProperties(diary, diaryEs);
         try {
+<<<<<<< HEAD
             String oldDate = diary.getDate();
             java.time.format.DateTimeFormatter oldFmt = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             java.time.format.DateTimeFormatter esFmt = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
@@ -53,6 +58,8 @@ public class DiaryServiceImpl implements DiaryService {
             diaryEs.setDate(diary.getDate());
         }
         try {
+=======
+>>>>>>> d0d46300093d1196bd0f7da5ee1bae39e074e655
             diarySearchService.syncDiaryToElasticsearch(diaryEs);
         } catch (IOException e) {
             e.printStackTrace();
@@ -69,12 +76,17 @@ public class DiaryServiceImpl implements DiaryService {
             grade = 10.0;
         }
         diary.setGrade(grade);
+<<<<<<< HEAD
         diaryMapper.updateGrade(diary);
+=======
+        diaryMapper.save(diary);
+>>>>>>> d0d46300093d1196bd0f7da5ee1bae39e074e655
 
         // 同步到 Elasticsearch
         DiaryEs diaryEs = new DiaryEs();
         BeanUtils.copyProperties(diary, diaryEs);
         try {
+<<<<<<< HEAD
             String oldDate = diary.getDate();
             java.time.format.DateTimeFormatter oldFmt = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             java.time.format.DateTimeFormatter esFmt = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
@@ -84,6 +96,8 @@ public class DiaryServiceImpl implements DiaryService {
             diaryEs.setDate(diary.getDate());
         }
         try {
+=======
+>>>>>>> d0d46300093d1196bd0f7da5ee1bae39e074e655
             diarySearchService.syncDiaryToElasticsearch(diaryEs);
         } catch (IOException e) {
             e.printStackTrace();
@@ -205,6 +219,7 @@ public class DiaryServiceImpl implements DiaryService {
         DiaryEs diaryEs = new DiaryEs();
         BeanUtils.copyProperties(diary, diaryEs);
         try {
+<<<<<<< HEAD
             String oldDate = diary.getDate();
             java.time.format.DateTimeFormatter oldFmt = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             java.time.format.DateTimeFormatter esFmt = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
@@ -214,6 +229,8 @@ public class DiaryServiceImpl implements DiaryService {
             diaryEs.setDate(diary.getDate());
         }
         try {
+=======
+>>>>>>> d0d46300093d1196bd0f7da5ee1bae39e074e655
             diarySearchService.syncDiaryToElasticsearch(diaryEs);
         } catch (IOException e) {
             e.printStackTrace();
