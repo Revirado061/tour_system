@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.springboottoursystem.mapper.BuildingMapper">
+
+    <!-- 根据名称查询单个建筑 -->
+    <select id="findByName" parameterType="String" resultType="org.example.springboottoursystem.domain.Building">
+        SELECT * FROM building WHERE name = #{buildingName}
+    </select>
+
+    <!-- 查询所有建筑 -->
+    <select id="findAll" resultType="org.example.springboottoursystem.domain.Building">
+        SELECT * FROM building
+    </select>
+</mapper>

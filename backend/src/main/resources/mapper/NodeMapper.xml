@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.springboottoursystem.mapper.NodeMapper">
+
+    <!-- 根据名称查询节点 -->
+    <select id="findByName" parameterType="String" resultType="org.example.springboottoursystem.domain.Node">
+        SELECT * FROM node WHERE name = #{name}
+    </select>
+
+    <!-- 根据ID查询节点 -->
+    <select id="findById" parameterType="long" resultType="org.example.springboottoursystem.domain.Node">
+        SELECT * FROM node WHERE id = #{id}
+    </select>
+
+    <select id="findAll" resultType="org.example.springboottoursystem.domain.Node">
+        SELECT * FROM node
+    </select>
+</mapper>
